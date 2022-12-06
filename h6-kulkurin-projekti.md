@@ -156,7 +156,7 @@ vagrant@bullseye:~$
 
 Vagrantilla luotu virtuaalikone vaikuttaisi olevan toiminnassa, sillä siihen saatiin ssh-yhteys. Lisävarmistukseksi katsoin vielä, että virtuaalikone löytyi VirtualBoxista.
 
-![1.png](Vagrant virtual machine in virtualbox)
+[1.png](Vagrant virtual machine in virtualbox)
 
 Ja siellähän se näkyi olevan pyörimässä! Tuhoan vielä tämän koneen seuraavaa tehtävää varten:
 ```
@@ -174,5 +174,5 @@ Virtuaalikone poistui onnistuneesti.
 
 Avasin Vagrantin luoman `Vagrantfile`n notepadilla, ja korvasin sen sisällön (https://terokarvinen.com/2021/two-machine-virtual-network-with-debian-11-bullseye-and-vagrant/) saadulla sisällöllä.
 
-![2.png](Changes to Vagrantfile)
+[2.png](Changes to Vagrantfile)
 
