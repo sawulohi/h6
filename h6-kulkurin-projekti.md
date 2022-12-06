@@ -158,7 +158,7 @@ Vagrantilla luotu virtuaalikone vaikuttaisi olevan toiminnassa, sillä siihen sa
 
 ![Vagrant virtual machine in virtualbox](1.png)
 
-Ja siellähän se näkyi olevan pyörimässä! Tuhoan vielä tämän koneen seuraavaa tehtävää varten:
+Ja siellähän se näkyi olevan pyörimässä! Tuhosin vielä tämän koneen seuraavaa tehtävää varten:
 ```
 vagrant@bullseye:~$ exit
 logout
@@ -172,7 +172,61 @@ Virtuaalikone poistui onnistuneesti.
 
 ## b) Yksityisverkko. Asenna kaksi virtuaalikonetta samaan verkkoon Vagrantilla. Laita toisen koneen nimeksi "isanta" ja toisen "renki1". Kokeile, että "renki1" saa yhteyden koneeseen "isanta" (esim. ping tai nc). Tehtävä tulee siis tehdä alusta, vaikka olisit ehtinyt kokeilla tätä tunnilla.
 
-Avasin Vagrantin luoman `Vagrantfile`n notepadilla, ja korvasin sen sisällön https://terokarvinen.com/2021/two-machine-virtual-network-with-debian-11-bullseye-and-vagrant/ saadulla sisällöllä.
+Avasin Vagrantin luoman `Vagrantfile`n notepadilla, ja korvasin sen sisällön https://terokarvinen.com/2021/two-machine-virtual-network-with-debian-11-bullseye-and-vagrant/ saadulla sisällöllä. Vaihdoin myös hostien nimet tehtävänannon mukaan.
 
 ![Changes to Vagrantfile](2.png)
 
+Sitten ajoin `vagrant up`illa. Asennuksessa kesti hetkinen. Se näytti kuitenkin onnistuneen:
+
+![two vagrant virtual hosts](3.png)
+
+Otin ssh-yhteyden renkiin verkon testaamista varten ja testasin sitä pingaamalla:
+
+```
+PS C:\vagrant> vagrant ssh renki1
+vagrant@renki1:~$ ping -c 2 192.168.88.101
+PING 192.168.88.101 (192.168.88.101) 56(84) bytes of data.
+64 bytes from 192.168.88.101: icmp_seq=1 ttl=64 time=0.316 ms
+64 bytes from 192.168.88.101: icmp_seq=2 ttl=64 time=1.12 ms
+
+--- 192.168.88.101 ping statistics ---
+2 packets transmitted, 2 received, 0% packet loss, time 1010ms
+rtt min/avg/max/mdev = 0.316/0.717/1.118/0.401 ms
+```
+Yhteys toimii ainakin ping-testin perusteella. Osoitteen testiä varten katsoin aiemmin säädetystä Vagrantfilestä.
+
+## c) Salt master-slave. Toteuta Salt master-slave -arkkitehtuuri verkon yli. Aseta edellisen kohdan kone renki1 orjaksi koneelle isanta.
+
+Asensin isanta-koneelle salt-masterin ja renki1-koneelle salt-minionin (tein nämä samanaikaisesti kahdella instanssilla PowerShelliä):
+
+```
+*MASTER:*
+
+PS C:\vagrant> vagrant ssh isanta
+vagrant@isanta:~$ sudo apt-get update
+vagrant@isanta:~$ sudo apt-get -y install salt-master 
+
+*SLAVE:*
+PS C:\vagrant> vagrant ssh isanta
+vagrant@renki1:~$ sudo apt-get update
+vagrant@renki1:~$ sudo apt-get -y install salt-minion
+vagrant@renki1:~$ sudoedit /etc/salt/minion
+master: 192.168.88.101
+id: renki1
+vagrant@renki1:~$ sudo systemctl restart salt-minion.service
+
+*MASTER:*
+vagrant@isanta:~$ sudo salt-key -A
+The following keys are going to be accepted:
+Unaccepted Keys:
+renki1
+Proceed? [n/Y] y
+Key for minion renki1 accepted.
+
+vagrant@isanta:~$ sudo salt renki1 cmd.run 'whoami'
+renki1:
+    root
+
+```
+
+Arkkitehtuuri asentui onnistuneesti. Tämän tiesin viimeisimmällä komennolla, kutsuin renkiä 'whoami'-komennolla testiksi.
