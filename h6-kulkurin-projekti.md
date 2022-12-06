@@ -156,7 +156,7 @@ vagrant@bullseye:~$
 
 Vagrantilla luotu virtuaalikone vaikuttaisi olevan toiminnassa, sillä siihen saatiin ssh-yhteys. Lisävarmistukseksi katsoin vielä, että virtuaalikone löytyi VirtualBoxista.
 
-[1.png](Vagrant virtual machine in virtualbox)
+![Vagrant virtual machine in virtualbox](1.png)
 
 Ja siellähän se näkyi olevan pyörimässä! Tuhoan vielä tämän koneen seuraavaa tehtävää varten:
 ```
@@ -172,7 +172,7 @@ Virtuaalikone poistui onnistuneesti.
 
 ## b) Yksityisverkko. Asenna kaksi virtuaalikonetta samaan verkkoon Vagrantilla. Laita toisen koneen nimeksi "isanta" ja toisen "renki1". Kokeile, että "renki1" saa yhteyden koneeseen "isanta" (esim. ping tai nc). Tehtävä tulee siis tehdä alusta, vaikka olisit ehtinyt kokeilla tätä tunnilla.
 
-Avasin Vagrantin luoman `Vagrantfile`n notepadilla, ja korvasin sen sisällön (https://terokarvinen.com/2021/two-machine-virtual-network-with-debian-11-bullseye-and-vagrant/) saadulla sisällöllä.
+Avasin Vagrantin luoman `Vagrantfile`n notepadilla, ja korvasin sen sisällön https://terokarvinen.com/2021/two-machine-virtual-network-with-debian-11-bullseye-and-vagrant/ saadulla sisällöllä.
 
-[2.png](Changes to Vagrantfile)
+![Changes to Vagrantfile](2.png)
 
